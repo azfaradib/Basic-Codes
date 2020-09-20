@@ -1,0 +1,24 @@
+
+A = reshape(1:144,12,12)  % Answer of 1
+
+B=transpose (reshape(1:144,12,12)) % Answer of 2
+
+C=A(2:2:length(A),1:2:length(A))% Answer of 3
+
+for m = 1:length(A)
+    for n = 1:length(A)
+        if A(m,n)> 30
+            D(m,n) = 1;% Elements greater than 30
+        else
+            D(m,n) = 0;% Elements less or equal to 30
+        end
+    end
+end
+display(D) % Answer of 4
+
+X = linsolve([1 1 1; 2 1 0; 0 1 1],[9;3;5]) % Answer of 5
+
+
+%% Reference sites used for learning:
+%% https://www.mathworks.com/help/matlab/matrices-and-arrays.html
+%% https://www.mathworks.com/help/symbolic/linsolve.html?s_tid=doc_ta
