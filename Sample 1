@@ -22,3 +22,39 @@ X = linsolve([1 1 1; 2 1 0; 0 1 1],[9;3;5]) % Answer of 5
 %% Reference sites used for learning:
 %% https://www.mathworks.com/help/matlab/matrices-and-arrays.html
 %% https://www.mathworks.com/help/symbolic/linsolve.html?s_tid=doc_ta
+
+
+i_pepper = imread('peppers.png');
+i_flipped=flipud(i_pepper);
+figure, imshow(i_flipped(:,:,:,1))% Answer of 1
+
+r= i_pepper(:,:,1) ;
+g = i_pepper(:,:,2) ;
+b= i_pepper(:,:,3) ;  
+i_greyscale=(1/3)*r+ (1/3)*g+ (1/3)*b
+figure, imshow(i_greyscale(:,:,:,1))% Answer of 2
+
+i_swap(:,:,1)=b;
+i_swap(:,:,2)=g;
+i_swap(:,:,3)=r;
+figure, imshow(i_swap(:,:,:,1))% Answer of 3
+
+transpose_i_greyscale=transpose(i_greyscale);
+rotated_i_greyscale=flipud(transpose_i_greyscale);
+figure, imshow(rotated_i_greyscale(:,:,:,1)) % Answer of 4
+ 
+i_part1 = reshape(1:144,12,12); 
+temp= transpose (i_part1);
+i_part1(:,:,3)= temp %12 by 12 by 3 image using the matrix from part 1
+size(i_part1)
+figure, imshow(i_part1(:,:,:,1));  
+i_converted=reshape(i_part1,144,3); % Answer of 5(a)
+size(i_converted)
+figure, imshow(i_converted(:,:,:,1)) 
+i_backconverted=reshape(i_converted,12,12,3); % Answer of 5(b)
+size(i_backconverted)
+figure, imshow(i_backconverted(:,:,:,1)) 
+
+% %  Reference sites used for learning:
+% %  https://www.mathworks.com/help/matlab/matrices-and-arrays.html
+% %  https://www.mathworks.com/help/images/display-multiple-images.html
