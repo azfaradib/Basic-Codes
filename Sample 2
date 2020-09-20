@@ -1,0 +1,79 @@
+
+function newMagnitudeImage = NonMaximalSuppression(magnitude,orientation)
+
+% Write your function here
+
+[x,y]=size(magnitude);
+
+newMagnitudeImage = zeros(x, y);
+
+% The comparison to find horizontal edges
+tmp = newMagnitudeImage;
+horMag = ( (orientation>(-pi/8)) & (orientation<=(pi/8)) ) | ...
+( (orientation>(7*pi/8)) | (orientation<=(-7*pi/8)) );
+tmp(:,2:y) = magnitude(:,1:y-1); 
+comp1 = horMag & ( (magnitude - tmp)>0 ); 
+tmp(:,1:y-1) = magnitude(:,2:y); 
+comp2 = horMag & ( (magnitude - tmp)>0 );
+newMagnitudeImage = newMagnitudeImage + magnitude .* ( comp1 & comp2 );        
+
+% The comparison to find plus 45 deg direction edges
+tmp = newMagnitudeImage;
+FortyFiveMag = ( (orientation>(pi/8)) & (orientation<=(3*pi/8)) ) | ...
+( (orientation>(-7*pi/8)) | (orientation<=(-5*pi/8)) );
+tmp(2:x,2:y) = magnitude(1:x-1,1:y-1); 
+comp1 = FortyFiveMag & ( (magnitude - tmp)>0 ); 
+tmp(1:x-1,1:y-1) = magnitude(2:x,2:y);
+comp2 = FortyFiveMag & ( (magnitude - tmp)>0 );
+newMagnitudeImage = newMagnitudeImage + magnitude .* ( comp1 & comp2 ); 
+
+
+% The comparison to find vertical edges
+tmp = newMagnitudeImage;
+VerticalMag = ( (orientation>(3*pi/8)) & (orientation<=(5*pi/8)) ) | ...
+( (orientation>(-5*pi/8)) | (orientation<=(-3*pi/8)) );
+tmp(2:x,:) = magnitude(1:x-1,:); 
+comp1 = VerticalMag & ( (magnitude - tmp)>0 ); 
+tmp(1:x-1,:) = magnitude(2:x,:); 
+comp2 = VerticalMag & ( (magnitude - tmp)>0 );
+newMagnitudeImage = newMagnitudeImage + magnitude .* ( comp1 & comp2 ); 
+
+% The comparison to minus 45 deg edges
+tmp = newMagnitudeImage;
+mFortyFiveMag = ( (orientation>(5*pi/8)) & (orientation<=(7*pi/8)) ) | ...
+( (orientation>(-3*pi/8)) | (orientation<=(-pi/8)) );
+tmp(2:x,2:y) = magnitude(1:x-1,1:y-1); 
+comp1 = mFortyFiveMag & ( (magnitude - tmp)>0 ); 
+tmp(1:x-1,1:y-1) = magnitude(2:x,2:y); 
+comp2 = mFortyFiveMag & ( (magnitude - tmp)>0 );
+newMagnitudeImage = newMagnitudeImage + magnitude .* ( comp1 & comp2 ); 
+
+end
+
+
+%Reference:
+% ELEC6661 Class Lecture, Dr. Hasasn Rivaz
+% https://moodle.concordia.ca/moodle/pluginfile.php/3789882/mod_resource/content/1/w05_Canny_NLM.pdf
+
+
+function BinaryEdgeImage = HysteresisThreshold(magnitudeImage,minThresh,maxThresh)
+
+% Write your function here
+
+
+% Finding points above lower threshold
+aboveminthresh = magnitudeImage > minThresh;   
+
+% Defining points above upper threshold
+[xabovemaxthresh, yabovemaxthresh] = find(magnitudeImage > maxThresh);  
+
+% Obtaining image by connecting 
+
+BinaryEdgeImage = bwselect(aboveminthresh, yabovemaxthresh, xabovemaxthresh);
+
+end
+
+
+%Reference:
+% Mathworks Documentation
+% (https://www.mathworks.com/help/images/ref/bwselect.html)
